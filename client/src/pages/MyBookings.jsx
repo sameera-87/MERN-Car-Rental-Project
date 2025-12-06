@@ -42,7 +42,7 @@ const MyBookings = () => {
 
             {/* Booking Info */}
             <div className='md:col-span-2'>
-              <div className='felx items-center gap-2'>
+              <div className='flex items-center gap-2'>
                 <p className='px-3 py-1.5 bg-light rounded'>Booking #{index + 1}</p>
                 <p className={`px-3 py-1 text-xs rounded-full ${booking.status ===
                 'confirmed' ? 'bg-green-400/15 text-green-600' : 'bg-red-400/15 text-red-600'}`}>
@@ -59,7 +59,7 @@ const MyBookings = () => {
               </div>
 
               <div className='flex items-start gap-2 mt-3'>
-                <img src={assets.calendar_icon_colored}  alt="" className='w-4 h-4 mt-1' />
+                <img src={assets.location_icon_colored}  alt="" className='w-4 h-4 mt-1' />
                 <div>
                   <p className='text-gray-500'>Pick-up Location</p>
                   <p>{booking.car.location}</p>
