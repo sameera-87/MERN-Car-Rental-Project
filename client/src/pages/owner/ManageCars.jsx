@@ -65,7 +65,9 @@ const ManageCars = () => {
                 </td>
               </tr>
             ))}
+
           </tbody>
+
 
         </table>
 
