@@ -51,3 +51,78 @@ export const addCar = async (req, res)=>{
         res.json({success: false, message: error.message})
     }
 }
+
+// API to List Owner Cars
+export const getOwnerCars = async (req, res) => {
+    try {
+        const {_id} = req.user;
+        const cars = await Car.find({owner : _id})
+        res.join({success: true, cars})
+    } catch (error) {
+        console.log(error.message);
+        res.json({success: false, message: error.mesage})
+    }
+}
+
+// API to Toggle Car Availabilty
+export const toggleCarAvailailty = async (req, res) => {
+    try {
+        const {_id} = req.user;
+        const {carId} = req.body
+        const car = await Car.findById(carId)
+
+        // Checking is car belongs to the user
+        if(car.owner.toString() !== _id.toString()){
+            return res.json({ success: false, message: "Unauthorized" });
+        }
+
+        car.isAvaliable = !car.isAvaliable;
+        await car.save()
+
+        res.json({succes: true, message: "Availabilty Toggled"})
+    } catch (error) {
+        console.log(error.message);
+        res.json({success: false, message: error.mesage})
+    }
+}
+
+// API to delete a car
+export const deleteCar = async (req, res) => {
+    try {
+        const {_id} = req.user;
+        const {carId} = req.body
+        const car = await Car.findById(carId)
+
+        // Checking is car belongs to the user
+        if(car.owner.toString() !== _id.toString()){
+            return res.json({ success: false, message: "Unauthorized" });
+        }
+
+        car.owner = null;
+        car.isAvaliable = false;
+
+        await car.save()
+
+        res.json({succes: true, message: "Car Removed"})
+    } catch (error) {
+        console.log(error.message);
+        res.json({success: false, message: error.mesage})
+    }
+}
+
+// Api to get dashboard data
+export const getDashboarData = async (req, res) => {
+    try {
+        const { _id, role } = req.user;
+
+        if(role !== 'owner'){
+            return res.json({ success: false, message: "Unauthorized"});
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.json({success: false, message: error.mesage})
+    }
+}
+
+
