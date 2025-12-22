@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const {ObjectIdbjectId} = mongoose.Schema.Types
+const {ObjectId} = mongoose.Schema.Types
 
 
 const Carschema = new mongoose.Schema({
