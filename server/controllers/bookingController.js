@@ -94,3 +94,23 @@ export const getOwnerBooking = async (req, res) => {
         res.json({success: false, message: error.message})
     }
 }
+
+// API to change the booking status
+export const changeBookingStatus = async (req, res) => {
+    try{
+        const {_id} = req.user;
+        const {bookingId, status} = req.body;
+
+        const booking = await Booking.findById(bookingId)
+
+        if(booking.owner.toString() !== _id.toString()){
+            return res.json({ success: false, message: "Unauthorized"})
+        }
+
+        booking.status = status;
+        await booking.save();
+    } catch(error) {
+        console.log(error.message);
+        res.json({success: false, message: error.message})
+    }
+}
