@@ -1,9 +1,15 @@
 import React from 'react'
 import { assets } from '../assets/assets'
+import { motion } from 'motion/react'
 
 const Footer = () => {
   return (
-        <div className='px-6 md:px-16 lg:px-24 xl:px-32 mt-60 text-sm text-gray-500'>
+        <motion.div 
+        initial={{opacity: 0, y: 30}}
+        whileInView={{opacity: 1, y: 0}}
+        transition={{duration: 0.6}}
+        
+        className='px-6 md:px-16 lg:px-24 xl:px-32 mt-60 text-sm text-gray-500'>
 
             <div className='flex flex-wrap justify-between items-start gap-8 pb-6
             border-borderColor border-b'>
@@ -70,7 +76,7 @@ const Footer = () => {
                     <li><a href="#">Cookies</a></li>
                 </ul>
             </div>
-        </div>    
+        </motion.div>    
   )
 }
 

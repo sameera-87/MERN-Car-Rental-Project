@@ -3,6 +3,8 @@ import { assets, dummyCarData, dummyMyBookingsData } from '../assets/assets'
 import Title from '../components/Title'
 import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
+import { motion } from 'motion/react'
+
 
 const MyBookings = () => {
 
@@ -28,7 +30,11 @@ const MyBookings = () => {
   }, [user])
 
   return (
-    <div className='px-6 md:px-16 lg:px-24 xl:px-32 2xl:px-48 mt-16 text-sm 
+    <motion.div 
+    initial={{opacity: 0, y:30}}
+    animate={{opacity: 1, y: 0}}
+    transition={{duration: 0.6}}
+    className='px-6 md:px-16 lg:px-24 xl:px-32 2xl:px-48 mt-16 text-sm 
     max-w-7xl'>
 
       <Title title='My Bookings'
@@ -37,7 +43,11 @@ const MyBookings = () => {
       
       <div>
         {bookings.map((booking, index)=>(
-          <div key={booking._id} className='grid grid-cols-1 md:grid-cols-4 gap-6 
+          <motion.div
+          initial={{ opacity: 0, y: 20}}
+          animate={{ opacity: 1, y: 0}}
+          transition={{ delay: index * 0.1, duration: 0.4}}
+          key={booking._id} className='grid grid-cols-1 md:grid-cols-4 gap-6 
           p-6 border border-borderColor rounded-lg mt-5 first:mt-12'>
             
             {/* Car Image + Info */}
@@ -88,10 +98,10 @@ const MyBookings = () => {
               </div>
             </div>
             
-          </div>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }
 
