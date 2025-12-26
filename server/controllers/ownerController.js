@@ -58,7 +58,7 @@ export const getOwnerCars = async (req, res) => {
     try {
         const {_id} = req.user;
         const cars = await Car.find({owner : _id})
-        res.join({success: true, cars})
+        res.json({success: true, cars})
     } catch (error) {
         console.log(error.message);
         res.json({success: false, message: error.mesage})
@@ -77,10 +77,10 @@ export const toggleCarAvailailty = async (req, res) => {
             return res.json({ success: false, message: "Unauthorized" });
         }
 
-        car.isAvaliable = !car.isAvaliable;
+        car.isAvailable = !car.isAvailable;
         await car.save()
 
-        res.json({succes: true, message: "Availabilty Toggled"})
+        res.json({success: true, message: "Availabilty Toggled"})
     } catch (error) {
         console.log(error.message);
         res.json({success: false, message: error.mesage})
