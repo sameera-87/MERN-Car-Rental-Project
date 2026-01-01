@@ -3,6 +3,8 @@ import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 import dotenv from "dotenv";
 import Car from "../models/Car.js"
+import Booking from "../models/Booking.js"
+
 dotenv.config();
 
 
@@ -80,16 +82,37 @@ export const getUserData = async (req, res) => {
     }
 }
 
-// Get all cars for the frontend
-export const getCars = async (req, res) => {
+// Get cars using loaction, pickupdate and return date
+export const getCarsUsingDates = async (req, res) => {
     try{
-        const cars = await Car.find({isAvailable: true})
-
-        // const cars = await Car.find({isAvaliable: false})
-        // console.log("getCarFunction called")
-        // console.log(cars)
+        // const cars = await Car.find({isAvailable: true})
         
+        const { pickupLocation, pickupDate, returnDate } = req.query;
+
+        // Convert date-only → full-day time range
+        const pickupStart = new Date(pickupDate);
+        pickupStart.setHours(0, 0, 0, 0);
+
+        const returnEnd = new Date(returnDate);
+        returnEnd.setHours(23, 59, 59, 999);
+
+        // Find cars already booked in this range
+        const bookedCars = await Booking.distinct("car", {
+            status: {$ne: "cancelled"},
+            pickupAt: {$lt: returnEnd},
+            returnAt: {$gt: pickupStart}
+        })
+
+
+        //  Find available cars
+        const cars = await Car.find({
+            _id: {$nin: bookedCars},
+            location: pickupLocation
+        });
+
         res.json({success: true, cars})
+
+        console.log(cars)
     } catch(error){
         console.log(error.message);
         res.json({success: false, message: error.message})

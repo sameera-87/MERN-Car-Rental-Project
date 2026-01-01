@@ -2,14 +2,15 @@ import Booking from "../models/Booking.js"
 import Car from "../models/Car.js";
 
 // Function to check the Availabilty of Car for a given date
-const checkAvailabilty = async (car, pickupDate, returnDate) => {
-    const bookings = await Booking.find({
+const checkAvailabilty = async (car, pickupAt, returnAt) => {
+    const overlappingBooking = await Booking.findOne({
         car,
-        pickupDate: {$lte: returnDate},
-        returnDate: {$gte: pickupDate},
+        status: {$ne : "cancelled"},
+        pickupAt: {$lt: returnAt},
+        returnAt: {$gte: pickupAt},
     })
 
-    return bookings.length === 0;
+    return !overlappingBooking;
 }
 
 // API to check availabilty of cars for the given Date and location
@@ -22,8 +23,8 @@ export const checkAvailabiltyOfCar = async (req, res) => {
 
         // check car availability for the given date range using promise
         const availableCarPromises = cars.map(async (car) => {
-            const isAvaliable = await checkAvailabilty(car._id, pickupDate, returnDate)
-            return {...car._doc, isAvaliable: isAvailable}
+            const isAvailable = await checkAvailabilty(car._id, pickupDate, returnDate)
+            return {...car._doc, isAvailable: isAvailable}
         })
 
         let availableCars = await Promise.all(availableCarPromises);
@@ -37,30 +38,60 @@ export const checkAvailabiltyOfCar = async (req, res) => {
     }
 }
 
-// API toc create Booking
+// API to create Booking
 export const createBooking = async (req, res) => {
     try{
         const {_id} = req.user;
-        const {car, pickupDate, returnDate} = req.body;
+        const {car, pickupAt, returnAt} = req.body;
 
-        const isAvailable = await checkAvailabilty(car, pickupDate, returnDate)
-        if(!isAvailable){
-            return res.json({success: false, message: "Car is not available"})
+        const pickupTime = new Date(pickupAt);
+        const returnTime = new Date(returnAt);
+
+        // basic validation
+        if(pickupTime >= returnTime){
+            return res.json({
+                success: false,
+                message: "Return time must be after pickup time."
+            })
         }
 
+        // check availability
+        const isAvailable = await checkAvailabilty(car, pickupTime, returnTime)
+        if(!isAvailable){
+            return res.json({
+                success: false, 
+                message: "Car is not available for the selected time slot"})
+        }
+
+        // Fetch car
         const carData = await Car.findById(car)
+        if (!carData) {
+            return res.json({ success: false, message: "Car not found" });
+        }
+        
+        // Calculate duration (hours)
+        const durationInHours = ((returnTime - pickupTime) / (1000 * 60 * 60));
 
-        // Calculate price based on pickupDate and returnDate
-        const picked = new Date(pickupDate);
-        const returned = new Date(returnDate);
-        const noOfDays = Math.ceil((returned - picked) / (1000 * 60 * 60 * 24))
-        const price = carData.pricePerDay * noOfDays;
+        // booking should be more than 2 hours
+        if(durationInHours < 1 ){
+            return({
+                success : false,
+                message: "Minimum booking duration is 1 hour"
+            });
+        }
 
-        await Booking.create({car, owner: carData.owner, user: _id, pickupDate, returnDate, price})
+        // Price calculation
+        const totalPrice = Math.ceil(durationInHours) * (carData.pricePerDay / 24);
 
-        // Update availability
-        carData.isAvailable = false; // or toggle if needed
-        await carData.save();
+        await Booking.create({
+            car, 
+            owner: carData.owner, 
+            user: _id, 
+            pickupAt: pickupTime,
+            returnAt: returnTime,
+            durationInHours: Math.ceil(durationInHours),
+            price: totalPrice
+        });
 
         res.json({success: true, message: "Booking Created"})
 

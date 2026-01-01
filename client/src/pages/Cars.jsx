@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Title from '../components/Title'
-import { assets, dummyCarData } from '../assets/assets'
+import { assets } from '../assets/assets'
 import CarCard from '../components/CarCard';
 import { useSearchParams } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
@@ -39,12 +39,18 @@ const Cars = () => {
   }
 
   const searchCarAvailability = async () => {
-    const {data} = await axios.post('/api/bookings/check-availability', 
-    {location: pickupLocation, pickupDate, returnDate})
+    const {data} = await axios.get(`/api/user/cars?pickupLocation=${pickupLocation}`+
+            `&pickupDate=${pickupDate}`+
+            `&returnDate=${returnDate}`)
+
+    // console.log(`/user/cars?pickupLocation=${pickupLocation}`+
+    //         `&pickupDate=${pickupDate}`+
+    //         `&returnDate=${returnDate}`)
 
     if(data.success) {
-      setFilteredCars(data.availableCars)
-      if(data.availableCars.length === 0){
+      setFilteredCars(data.cars)
+
+      if(data.cars.length === 0){
         toast('No cars available')
       }
 
