@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Title from '../../components/owner/Title'
 import { assets } from '../../assets/assets'
 import { useAppContext } from '../../context/AppContext'
+import toast from 'react-hot-toast';
 
 const AddCar = () => {
 
@@ -25,7 +26,12 @@ const AddCar = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()
-    if(isLoading) return null
+    if(isLoading) return null;
+
+    if(!image){
+      toast.error("Please upload an image");
+      return;
+    } 
 
     setIsLoading(true)
 
@@ -75,9 +81,9 @@ const AddCar = () => {
         <div className='flex items-center gap-2 w-full'>
           <label htmlFor='car-image'>
             <img src={image ? URL.createObjectURL(image) : assets.upload_icon} alt=""
-            className='h-14 rounded cursor-pointer' />
+            className='h-14 rounded cursor-pointer' required/>
             <input type="file" id="car-image" accept="image/*" hidden onChange={e =>
-              setImage(e.target.files[0])}/>
+              setImage(e.target.files[0])} />
           </label>
           <p className='text-sm text-gray-500'>Upload a picture of your car</p>
         </div>

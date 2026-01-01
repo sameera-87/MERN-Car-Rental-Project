@@ -25,6 +25,7 @@ const ManageBookings = () => {
       if(data.success){
         toast.success(data.message)
         fetchOwnerBookings()
+        
       } else {
         toast.error(error.message)
       }
@@ -32,6 +33,7 @@ const ManageBookings = () => {
       toast.error(error.message)
     }
   }
+
   useEffect(() => {
     fetchOwnerBookings()
   }, [])

@@ -10,3 +10,4 @@ userRouter.get('/data', protect, getUserData)
 userRouter.get('/cars', getCars)
 
 export default userRouter;
+
