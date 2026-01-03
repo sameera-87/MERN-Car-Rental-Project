@@ -23,6 +23,7 @@ const Cars = () => {
   const [filteredCars, setFilteredCars] = useState([])
 
   const applyFilter = async () => {
+    
     if(input === ''){
       setFilteredCars(cars)
       return null
