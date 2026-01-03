@@ -10,22 +10,53 @@ import { motion } from 'motion/react'
 const CarDetails = () => {
 
   const {id} = useParams()
-  const {cars, axios, pickupDate, setPickupDate, returnDate, setReturnDate} = useAppContext()
+  const {cars, axios, pickupAt, setPickupAt, returnAt, setReturnAt} = useAppContext()
+
+  const [pickupDate, setPickupDate] = useState("");
+  const [pickupHour, setPickupHour] = useState('9 AM');
+  const [returnDate, setReturnDate] = useState("");
+  const [returnHour, setReturnHour] = useState('9 AM');
+
+  // calculate the price of the trip
+  const [calculatedPrice, setCalculatedPrice] = useState(0)
 
   const navigate = useNavigate()
   const [car, setCar] = useState(null)
   const currency = import.meta.env.VITE_CURRENCY
 
+  // function to convert 24h Date and time
+  const toISODateTime = (date, time) => {
+    let [hour, meridiem] = time.split(" ")
+    hour = parseInt(hour)
+
+    if (meridiem === "PM" && hour !== 12) hour += 12
+    if (meridiem === "AM" && hour === 12) hour = 0
+
+    return new Date(`${date}T${hour.toString().padStart(2, "0")}:00:00`)
+  }
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+
+    const pickupAtValue = toISODateTime(pickupDate, pickupHour)
+    const returnAtValue = toISODateTime(returnDate, returnHour)
+
+    if (returnAt <= pickupAt) {
+      toast.error("Return time must be after pickup time")
+      return
+    }
+
+    setPickupAt(pickupAtValue)
+    setReturnAt(returnAtValue)
+
     try {
-      const {data} = await axios.post('/api/bookings/create', {
+      const { data } = await axios.post('/api/bookings/create', {
         car: id,
-        pickupDate,
-        returnDate
+        pickupAt,
+        returnAt
       })
-            
-      if(data.success){
+
+      if (data.success) {
         toast.success(data.message)
         navigate('/my-bookings')
       } else {
@@ -35,10 +66,47 @@ const CarDetails = () => {
       toast.error(error.message)
     }
   }
+  
+  // function to get the calculated price
+  const calculatePrice = async (pricePerDay, pickupAt, returnAt) => {
+    try {
+      const { data } = await axios.get('/api/bookings/price', {
+        params: {
+          pricePerDay,
+          pickupAt: pickupAt.toISOString(),
+          returnAt: returnAt.toISOString()
+        }
+      })
+
+      if (data.success) {
+        setCalculatedPrice(data.calculatedPrice)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
 
   useEffect(() => {
     setCar(cars.find(car => car._id === id))
   }, [cars, id])
+
+
+  useEffect(() => {
+    if (!pickupDate || !pickupHour || !returnDate || !returnHour) return
+
+    const pickupAt = toISODateTime(pickupDate, pickupHour)
+    const returnAt = toISODateTime(returnDate, returnHour)
+    
+      if (returnAt <= pickupAt) {
+        setCalculatedPrice(0)
+        return
+      }
+
+      calculatePrice(car.pricePerDay, pickupAt, returnAt)
+
+      // console.log(`pricePerDay: ${car.pricePerDay},pickupAt: ${pickupAt},returnAt: ${returnAt}`)
+
+  }, [pickupDate, pickupHour, returnDate, returnHour, car])
 
   return car ?(
     <div className='px-6 md:px-16 lg:px-24 xl:px-32 mt-16'>
@@ -132,21 +200,73 @@ const CarDetails = () => {
           text-gray-400 font-normal'> per day</span></p>
 
           <hr className='border-borderColor my-6'/>
-
-          <div className='flex flex-col gap-2'>
-            <label htmlFor='pickup-date'>Pickup Date</label>
-            <input value={pickupDate} onChange={(e) => setPickupDate(e. target.value)}
-            type="date" className='border border-borderColor px-3 py-2 
-            rounded-lg' required id="pickup-date" min={new Date().toISOString().split('T')[0]}/>
+          
+          {/* Pickup */}
+          <div className="flex flex-col gap-2">
+            <label>Pickup Date</label>
+            <input
+              type="date"
+              value={pickupDate}
+              onChange={(e) => setPickupDate(e.target.value)}
+              min={new Date().toISOString().split("T")[0]}
+              className="border border-borderColor px-3 py-2 rounded-lg"
+              required
+            />
           </div>
 
-          {/* add front end validation here, (return date cannot be previous than pickup date)       */}
-          <div className='flex flex-col gap-2'>
-            <label htmlFor='return-date'>Return Date</label>
-            <input value={returnDate} onChange={(e) => setReturnDate(e. target.value)}
-            type="date" className='border border-borderColor px-3 py-2 
-            rounded-lg' required id="return-date" min={new Date().toISOString().split('T')[0]}/>
+          <div className="flex flex-col gap-2">
+            <label>Pickup Time</label>
+            <select
+              value={pickupHour}
+              onChange={(e) => setPickupHour(e.target.value)}
+              className="border border-borderColor px-3 py-2 rounded-lg"
+              required
+            >
+              {["12 AM","1 AM","2 AM","3 AM","4 AM","5 AM","6 AM","7 AM","8 AM","9 AM","10 AM","11 AM",
+                "12 PM","1 PM","2 PM","3 PM","4 PM","5 PM","6 PM","7 PM","8 PM","9 PM","10 PM","11 PM"
+              ].map(time => (
+                <option key={time} value={time}>{time}</option>
+              ))}
+            </select>
           </div>
+
+          {/* Return */}
+          <div className="flex flex-col gap-2">
+            <label>Return Date</label>
+            <input
+              type="date"
+              value={returnDate}
+              onChange={(e) => setReturnDate(e.target.value)}
+              min={pickupDate || new Date().toISOString().split("T")[0]}
+              className="border border-borderColor px-3 py-2 rounded-lg"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label>Return Time</label>
+            <select
+              value={returnHour}
+              onChange={(e) => setReturnHour(e.target.value)}
+              className="border border-borderColor px-3 py-2 rounded-lg"
+              required
+            >
+              {["12 AM","1 AM","2 AM","3 AM","4 AM","5 AM","6 AM","7 AM","8 AM","9 AM","10 AM","11 AM",
+                "12 PM","1 PM","2 PM","3 PM","4 PM","5 PM","6 PM","7 PM","8 PM","9 PM","10 PM","11 PM"
+              ].map(time => (
+                <option key={time} value={time}>{time}</option>
+              ))}
+            </select>
+          </div>
+
+
+          {/* show the calculated price when the 4 fields are filled     */}
+          {
+            pickupDate && pickupHour && returnDate && returnHour &&
+            <div className='flex flex-col gap-2'>
+              {`Price: ${currency}${calculatedPrice}`}
+            </div>
+          }
 
           <button className='w-full bg-primary hover:bg-primary-dull 
           transition-all py-3 font-medium text-white rounded-xl cursor-pointer'>

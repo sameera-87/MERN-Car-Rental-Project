@@ -98,6 +98,24 @@ export const getUserBookingsService = async (userId) => {
         .sort({ createdAt: -1 });
 };
 
+// calculate the booking price
+export const calculateBookingPrice = (pricePerDay, pickupAt, returnAt) => {
+
+        const start = new Date(pickupAt)
+        const end = new Date(returnAt)
+
+        const dailyPrice = Number(pricePerDay)
+
+        const durationInHours = (end - start) / (1000 * 60 * 60);
+        
+        const totalPrice = Math.floor(
+            Math.ceil(durationInHours) * (dailyPrice / 24)
+        );
+
+
+        return totalPrice;
+}
+
 // Owner bookings
 export const getOwnerBookingsService = async (ownerId) => {
     return await Booking.find({ owner: ownerId })

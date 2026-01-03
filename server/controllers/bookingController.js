@@ -4,6 +4,7 @@ import {
     getUserBookingsService,
     getOwnerBookingsService,
     changeBookingStatusService,
+    calculateBookingPrice,
 } from "../services/bookingService.js";
 
 // Check availability
@@ -84,3 +85,16 @@ export const changeBookingStatus = async (req, res) => {
         res.json({ success: false, message: error.message });
     }
 };
+
+
+// get the calculated price of the booking
+export const getCalculatedPrice = async(req, res) => {
+    try {
+        const {pricePerDay, pickupAt, returnAt} =  req.query;
+        const calculatedPrice = calculateBookingPrice(pricePerDay, pickupAt, returnAt);
+
+        res.json({success: true, calculatedPrice});
+    } catch (error) {
+        res.json({success: false, message: error.message})
+    }
+}
