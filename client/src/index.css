@@ -7,8 +7,18 @@
 }
 
 @theme {
-    --color-primary: #2563EB;
-    --color-primary-dull: #1F58D8;
-    --color-light: #F1F5F9;
-    --color-borderColor: #c4c7d2;
+    /* The main brand color (Pine Green) */
+    --color-primary: #00695C; 
+    
+    /* A softer, desaturated version of the primary for hover states or backgrounds */
+    --color-primary-dull: #4D968E; 
+    
+    /* Clean background color for a professional enterprise feel */
+    --color-light: #F8F9FA; 
+    
+    /* Subtle border color to keep the UI light and modern (instead of harsh charcoal) */
+    --color-borderColor: #D1D5DB; 
+    
+    /* Added: A contrasting accent color for 'Book Now' or 'Active' states */
+    --color-accent: #26A69A;
 }
