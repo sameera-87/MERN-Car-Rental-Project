@@ -47,8 +47,11 @@ export const createBookingService = async (
     pickupAt,
     returnAt
 ) => {
+    
     const pickupTime = new Date(pickupAt);
     const returnTime = new Date(returnAt);
+
+    console.log("\n Entered to the service layer.")
 
     if (pickupTime >= returnTime) {
         throw new Error("Return time must be after pickup time");
@@ -76,8 +79,11 @@ export const createBookingService = async (
         throw new Error("Minimum booking duration is 1 hour");
     }
 
-    const totalPrice =
-        Math.ceil(durationInHours) * (car.pricePerDay / 24);
+    const pricePerDay = car.pricePerDay;
+
+    const totalPrice = Math.floor(
+        Math.ceil(durationInHours) * ( pricePerDay / 24)
+    );
 
     await Booking.create({
         car: carId,
@@ -111,7 +117,6 @@ export const calculateBookingPrice = (pricePerDay, pickupAt, returnAt) => {
         const totalPrice = Math.floor(
             Math.ceil(durationInHours) * (dailyPrice / 24)
         );
-
 
         return totalPrice;
 }

@@ -25,6 +25,19 @@ const MyBookings = () => {
     }
   }
 
+
+  // format date and time to display the date and the time also
+  const formatDateTime = (date) => {
+    const d = new Date(date)
+    const yyyy = d.getFullYear()
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    const hh = String(d.getHours()).padStart(2, '0')
+    const min = String(d.getMinutes()).padStart(2, '0')
+
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}`
+  }  
+
   useEffect(() => {
     user && fetchMyBookings()
   }, [user])
@@ -71,14 +84,17 @@ const MyBookings = () => {
                   {booking.status}</p>
               </div>
 
-              <div className='flex items-start gap-2 mt-3'>
-                <img src={assets.calendar_icon_colored}  alt="" className='w-4 h-4 mt-1' />
-                <div>
-                  <p className='text-gray-500'>Rental Period</p>
-                  <p>{booking.pickupDate.split('T')[0]} To 
-                    {booking.returnDate.split('T')[0]}</p>
-                </div>
+            <div className='flex items-start gap-2 mt-3'>
+              <img src={assets.calendar_icon_colored} alt="" className='w-4 h-4 mt-1' />
+              <div>
+                <p className='text-gray-500'>Rental Period</p>
+                <p>
+                  {formatDateTime(booking.pickupAt)} <br />
+                  to <br />
+                  {formatDateTime(booking.returnAt)}
+                </p>
               </div>
+            </div>
 
               <div className='flex items-start gap-2 mt-3'>
                 <img src={assets.location_icon_colored}  alt="" className='w-4 h-4 mt-1' />
@@ -87,6 +103,7 @@ const MyBookings = () => {
                   <p>{booking.car.location}</p>
                 </div>
               </div>
+              
             </div>
 
             {/* price */}
