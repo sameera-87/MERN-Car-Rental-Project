@@ -34,6 +34,18 @@ const ManageBookings = () => {
     }
   }
 
+  // format date and time
+  const formatDateTime = (iso) => {
+    const date = new Date(iso)
+    return date.toLocaleString([], {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
+
   useEffect(() => {
     fetchOwnerBookings()
   }, [])
@@ -66,7 +78,9 @@ const ManageBookings = () => {
                 </td>
 
                 <td className='p-3 max-md:hidden'>
-                  {booking.pickupDate.split('T')[0]} to {booking.returnDate.split('T')[0]}
+                  {formatDateTime(booking.pickupAt)} <br />
+                  to <br />
+                  {formatDateTime(booking.returnAt)}
                 </td>
 
                 <td className='p-3'>{currency}{booking.price}</td>

@@ -41,7 +41,7 @@ const CarDetails = () => {
     const pickupAtValue = toISODateTime(pickupDate, pickupHour)
     const returnAtValue = toISODateTime(returnDate, returnHour)
 
-    if (returnAt <= pickupAt) {
+    if (pickupAtValue >= returnAtValue) {
       toast.error("Return time must be after pickup time")
       return
     }
@@ -52,8 +52,8 @@ const CarDetails = () => {
     try {
       const { data } = await axios.post('/api/bookings/create', {
         car: id,
-        pickupAt,
-        returnAt
+        pickupAt: pickupAtValue.toISOString(),
+        returnAt: returnAtValue.toISOString()
       })
 
       if (data.success) {
