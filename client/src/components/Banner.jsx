@@ -21,16 +21,16 @@ const Banner = () => {
       {/* Text Content */}
       <div className="text-white max-w-xl">
         <h2 className="text-3xl md:text-4xl font-semibold leading-tight">
-          Do You Own a Luxury Car?
+          Own a Car in Sri Lanka?
         </h2>
 
         <p className="mt-3 text-white/90 text-sm md:text-base">
-          Monetize your vehicle effortlessly by listing it on Go Fleet.
+          Put Your Car to Work with Ceylon Drive.
         </p>
 
         <p className="mt-2 text-white/80 text-sm leading-relaxed">
-          We take care of insurance, driver verification, and secure payments —
-          so you can earn passive income, stress-free.
+            List your car on Ceylon Drive and let us handle bookings, verified drivers,
+            insurance coverage, and secure payments — so you can earn with confidence.
         </p>
 
         <motion.button
