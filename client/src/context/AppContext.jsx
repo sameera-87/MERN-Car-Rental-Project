@@ -20,6 +20,12 @@ export const AppProvider = ({ children }) => {
     const [pickupAt, setPickupAt] = useState("")
     const [returnAt, setReturnAt] = useState("")
 
+    // card payment popup
+    const [showPayment, setShowPayment] = useState(false)
+    const [activeBookingId, setActiveBookingId] = useState(null)
+    const [paymentSuccessTick, setPaymentSuccessTick] = useState(0);
+
+
     const [cars, setCars] = useState([])
 
     // Function to check if user is logged in
@@ -77,7 +83,9 @@ export const AppProvider = ({ children }) => {
         navigate, currency, axios, user, setUser,
         token, setToken, isOwner, setIsOwner, fetchUser, showLogin,
         setShowLogin, logout, fetchCars, cars, setCars,
-        pickupAt, setPickupAt, returnAt, setReturnAt
+        pickupAt, setPickupAt, returnAt, setReturnAt,
+        showPayment, setShowPayment, activeBookingId, setActiveBookingId, paymentSuccessTick,
+        setPaymentSuccessTick,
     }
 
     return (

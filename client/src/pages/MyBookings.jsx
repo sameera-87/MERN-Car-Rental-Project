@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { assets, dummyCarData, dummyMyBookingsData } from '../assets/assets'
+import { assets } from '../assets/assets'
 import Title from '../components/Title'
 import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
 import { motion } from 'motion/react'
 
-
 const MyBookings = () => {
-
-  const { axios, user, currency } = useAppContext()
+  
+  const { axios, user, currency, setShowPayment, setActiveBookingId, paymentSuccessTick } = useAppContext()
 
   const [bookings, setBookings] = useState([])
 
@@ -36,11 +35,17 @@ const MyBookings = () => {
     const min = String(d.getMinutes()).padStart(2, '0')
 
     return `${yyyy}-${mm}-${dd} ${hh}:${min}`
-  }  
+  }
 
   useEffect(() => {
     user && fetchMyBookings()
   }, [user])
+
+  useEffect(() => {
+  if (user) {
+    fetchMyBookings();
+  }
+  }, [paymentSuccessTick]);
 
   return (
     <motion.div 
@@ -82,6 +87,17 @@ const MyBookings = () => {
                 <p className={`px-3 py-1 text-xs rounded-full ${booking.status ===
                 'confirmed' ? 'bg-green-400/15 text-green-600' : 'bg-red-400/15 text-red-600'}`}>
                   {booking.status}</p>
+
+                <p className={`px-3 py-1 text-xs rounded-full ${
+                    booking.paymentStatus === "paid"
+                      ? "bg-green-400/15 text-green-600"
+                      : booking.paymentStatus === "failed"
+                      ? "bg-red-400/15 text-red-600"
+                      : "bg-yellow-400/15 text-yellow-600"
+                  }`}>
+                  {booking.paymentStatus}
+                </p>
+
               </div>
 
             <div className='flex items-start gap-2 mt-3'>
@@ -113,6 +129,19 @@ const MyBookings = () => {
                 <h1 className='text-2xl font-semibold text-primary'>{currency} {booking.price}</h1>
                 <p>Booked on {booking.createdAt.split('T')[0]}</p>
               </div>
+
+              {booking.paymentStatus === "unpaid" && (
+                  <button
+                    onClick={() => {
+                      setActiveBookingId(booking._id);
+                      setShowPayment(true);
+                    }}
+                    className={`mt-3 w-full py-2 rounded-md bg-primary text-white hover:bg-primary/90`}
+                  >
+                    Pay Now
+                  </button>
+              )}
+
             </div>
             
           </motion.div>
