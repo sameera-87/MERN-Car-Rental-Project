@@ -12,17 +12,24 @@ import ManageCars from './pages/owner/ManageCars';
 import ManageBookings from './pages/owner/ManageBookings';
 import Dashboard from './pages/owner/Dashboard';
 import Login from './components/Login';
+import PaymentModal from './components/paymentModal';
 import { Toaster } from 'react-hot-toast'
 import { useAppContext } from './context/AppContext';
+
+
 const App = () => {
 
-  const {showLogin} = useAppContext()
+  const {showLogin, showPayment} = useAppContext()
   const isOwnerPath = useLocation().pathname.startsWith('/owner');
+  
 
   return (
     <>
     <Toaster />
-      {showLogin && <Login/>}      
+      {showLogin && <Login/>}
+
+      {/* show the payment portal */}
+      {showPayment && <PaymentModal />}    
 
       {!isOwnerPath && <Navbar/>}
 
