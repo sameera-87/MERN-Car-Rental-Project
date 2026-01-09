@@ -46,7 +46,7 @@ const Dashboard = () => {
   
   return (
     <div className='px-4 pt-10 md:px-10 flex-1'>
-      <Title title="Admin Dashboard" subTitle="Monitor overall platform performance 
+      <Title title="Dashboard" subTitle="Monitor overall platform performance 
       including total cars, bookings, revenue, and recent activities"/>
 
       <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-8

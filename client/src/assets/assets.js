@@ -41,7 +41,9 @@ import car_image2 from "./car_image2.png"
 import car_image3 from "./car_image3.png"
 import car_image4 from "./car_image4.png"
 
-export const cityList = ['New York', 'Los Angeles', 'Houston', 'Chicago']
+
+export const cityList = ['Colombo', 'Kandy', 'Galle', 'Dambulla', 'Jaffna']
+
 
 export const assets = {
     logo,
@@ -92,6 +94,7 @@ export const menuLinks = [
     { name: "Home", path: "/" },
     { name: "Cars", path: "/cars" },
     { name: "My Bookings", path: "/my-bookings" },
+    { name: "Blogs", path: "/blogs" },
 ]
 
 export const ownerMenuLinks = [

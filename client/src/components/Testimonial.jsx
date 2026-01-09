@@ -9,19 +9,19 @@ const Testimonial = () => {
         {   name: "Emma Rodriguez", 
             location: "Barcelona, Spain", 
             image: assets.testimonial_image_1, 
-            testimonial: "I've rented cars from various companies, but the experience with Go Fleet was exceptional" 
+            testimonial: "I've rented cars from various companies, but the experience with CeylonDrive was exceptional" 
         },
 
         {   name: "John Smith", 
             location: "New York, USA", 
             image: assets.testimonial_image_2, 
-            testimonial: "Go Fleet exceeded my expectations! The car was in perfect condition, pickup was quick, and the pricing was completely transparent. Definitely the best rental experience I've had so far" 
+            testimonial: "CeylonDrive exceeded my expectations! The car was in perfect condition, pickup was quick, and the pricing was completely transparent. Definitely the best rental experience I've had so far" 
         },
 
         {   name: "Ava Jhonson", 
             location: "Los Angeles, USA", 
             image: assets.testimonial_image_2, 
-            testimonial: "From booking to drop-off, everything with Go Fleet was smooth and professional. The staff were helpful, the car felt brand new, and the whole experience was hassle-free. I’ll definitely choose them again!" 
+            testimonial: "From booking to drop-off, everything with CeylonDrive was smooth and professional. The staff were helpful, the car felt brand new, and the whole experience was hassle-free. I’ll definitely choose them again!" 
 
             // add image for testimonial 3
         },
