@@ -17,11 +17,17 @@ import PaymentModal from './components/paymentModal';
 import { Toaster } from 'react-hot-toast'
 import { useAppContext } from './context/AppContext';
 
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminManageUsers from './pages/admin/ManageUsers';
+import AdminManageCars from './pages/admin/ManageCars';
+import AdminManageBookings  from './pages/admin/ManageBookings';
+
 
 const App = () => {
 
   const {showLogin, showPayment} = useAppContext()
   const isOwnerPath = useLocation().pathname.startsWith('/owner');
+  const isAdminPath = useLocation().pathname.startsWith('/admin');
   
 
   return (
@@ -32,7 +38,7 @@ const App = () => {
       {/* show the payment portal */}
       {showPayment && <PaymentModal />}    
 
-      {!isOwnerPath && <Navbar/>}
+      {!isOwnerPath && !isAdminPath && <Navbar />}
 
       <Routes>
         <Route path='/' element={<Home/>} />
@@ -46,6 +52,14 @@ const App = () => {
           <Route path="manage-cars" element={<ManageCars />} />
           <Route path="manage-bookings" element={<ManageBookings />} />
         </Route>
+
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="users" element={<AdminManageUsers />} />
+          <Route path="cars" element={<AdminManageCars />} />
+          <Route path="bookings" element={<AdminManageBookings />} />
+        </Route>
+
+
       </Routes>
 
       {!isOwnerPath && <Footer/>}

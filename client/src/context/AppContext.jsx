@@ -16,6 +16,9 @@ export const AppProvider = ({ children }) => {
     const [token, setToken] = useState(null)
     const [user, setUser] = useState(null)
     const [isOwner, setIsOwner] = useState(false)
+
+    const [isAdmin, setIsAdmin] = useState(false);
+
     const [showLogin, setShowLogin] = useState(false)
     const [pickupAt, setPickupAt] = useState("")
     const [returnAt, setReturnAt] = useState("")
@@ -35,6 +38,7 @@ export const AppProvider = ({ children }) => {
             if(data.success){
                 setUser(data.user)
                 setIsOwner(data.user.role === 'owner')
+                setIsAdmin(data.user.role === 'admin')
             } else {
                 navigate('/')
             }
@@ -59,6 +63,7 @@ export const AppProvider = ({ children }) => {
         setToken(null)
         setUser(null)
         setIsOwner(false)
+        setIsAdmin(false)
         axios.defaults.headers.common['Authorization'] = ''
         toast.success('You have been logged out')
     }
@@ -81,7 +86,7 @@ export const AppProvider = ({ children }) => {
     
     const value = {
         navigate, currency, axios, user, setUser,
-        token, setToken, isOwner, setIsOwner, fetchUser, showLogin,
+        token, setToken, isOwner, setIsOwner, isAdmin, setIsAdmin, fetchUser, showLogin,
         setShowLogin, logout, fetchCars, cars, setCars,
         pickupAt, setPickupAt, returnAt, setReturnAt,
         showPayment, setShowPayment, activeBookingId, setActiveBookingId, paymentSuccessTick,

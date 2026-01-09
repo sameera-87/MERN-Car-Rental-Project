@@ -7,7 +7,7 @@ import { motion } from 'motion/react'
 
 export const Navbar = () => {
 
-  const { setShowLogin, user, logout, isOwner, axios, setIsOwner } = useAppContext()
+  const { setShowLogin, user, logout, isOwner, isAdmin, axios, setIsOwner } = useAppContext()
 
   const location = useLocation()
   const [open, setOpen] = useState(false)
@@ -26,6 +26,27 @@ export const Navbar = () => {
       toast.error(error.message)
     }
   }
+
+  const handleDashboardClick = async () => {
+    if (!user) {
+      setShowLogin(true)
+      return
+    }
+
+    if (isAdmin) {
+      navigate('/admin')
+      return
+    }
+
+    if (isOwner) {
+      navigate('/owner')
+      return
+    }
+
+    // Normal user → upgrade to owner
+    changeRole()
+  }
+
 
   return (
     <>
@@ -92,10 +113,14 @@ export const Navbar = () => {
 
             <div className="flex max-sm:flex-col items-start sm:items-center gap-4">
               <button
-                onClick={() => isOwner ? navigate('/owner') : changeRole()}
+                onClick={handleDashboardClick}
                 className="text-lg font-medium text-primary hover:text-primary-dull transition-colors"
               >
-                {isOwner ? 'Dashboard' : 'List cars'}
+                  {isAdmin
+                    ? 'Admin Dashboard'
+                    : isOwner
+                      ? 'Dashboard'
+                      : 'List cars'}
               </button>
 
               <button
