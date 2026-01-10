@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AppProvider } from './context/AppContext.jsx'
 import { MotionConfig } from 'motion/react'
 import StripeProvider from './stripe/StripeProvider.jsx'
+import Chatbot from './components/chatbot/chatbot.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -12,6 +13,7 @@ createRoot(document.getElementById('root')).render(
       <StripeProvider>
         <MotionConfig viewport={{once: true}}>
           <App />
+          <Chatbot />
         </MotionConfig>
       </StripeProvider>
     </AppProvider>
