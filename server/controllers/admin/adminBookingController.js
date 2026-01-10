@@ -11,9 +11,9 @@ import {
 export const getActiveConfirmedBookings = async (req, res) => {
   try {
     const bookings = await getActiveConfirmedBookingsService();
-    res.json(bookings);
+    res.json({success: true, bookings});
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -23,9 +23,9 @@ export const getActiveConfirmedBookings = async (req, res) => {
 export const getBookingsStartingToday = async (req, res) => {
   try {
     const bookings = await getBookingsStartingTodayService();
-    res.json(bookings);
+    res.json({success: true, bookings});
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -35,9 +35,9 @@ export const getBookingsStartingToday = async (req, res) => {
 export const getBookingsEndingToday = async (req, res) => {
   try {
     const bookings = await getBookingsEndingTodayService();
-    res.json(bookings);
+    res.json({success: true, bookings});
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ success: false, message: error.message});
   }
 };
 
@@ -47,8 +47,8 @@ export const getBookingsEndingToday = async (req, res) => {
 export const getConfirmedUnpaidBookings = async (req, res) => {
   try {
     const bookings = await getConfirmedUnpaidBookingsService();
-    res.json(bookings);
+    res.json({success: true, bookings});
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };

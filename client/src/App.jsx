@@ -21,6 +21,7 @@ import AdminLayout from './pages/admin/AdminLayout';
 import AdminManageUsers from './pages/admin/ManageUsers';
 import AdminManageCars from './pages/admin/ManageCars';
 import AdminManageBookings  from './pages/admin/ManageBookings';
+import AdminDashboard  from './pages/admin/AdminDashboard';
 
 
 const App = () => {
@@ -54,6 +55,7 @@ const App = () => {
         </Route>
 
         <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
           <Route path="users" element={<AdminManageUsers />} />
           <Route path="cars" element={<AdminManageCars />} />
           <Route path="bookings" element={<AdminManageBookings />} />
@@ -62,7 +64,7 @@ const App = () => {
 
       </Routes>
 
-      {!isOwnerPath && <Footer/>}
+      {!isOwnerPath && !isAdminPath && <Footer/>}
     </>
   )
 }

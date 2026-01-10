@@ -117,7 +117,7 @@ export const Navbar = () => {
                 className="text-lg font-medium text-primary hover:text-primary-dull transition-colors"
               >
                   {isAdmin
-                    ? 'Admin Dashboard'
+                    ? 'Dashboard'
                     : isOwner
                       ? 'Dashboard'
                       : 'List cars'}
