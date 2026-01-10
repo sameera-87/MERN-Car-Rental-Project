@@ -21,7 +21,7 @@ import listIconColored from "./listIconColored.svg"
 import cautionIconColored from "./cautionIconColored.svg"
 import arrow_icon from "./arrow_icon.svg"
 import star_icon from "./star_icon.svg"
-import check_icon from "./check_icon.svg"
+import checkIconColored from "./checkIcon.svg"
 import tick_icon from "./tick_icon.svg"
 import delete_icon from "./delete_icon.svg"
 import eye_icon from "./eye_icon.svg"
@@ -40,6 +40,9 @@ import car_image1 from "./car_image1.png"
 import car_image2 from "./car_image2.png"
 import car_image3 from "./car_image3.png"
 import car_image4 from "./car_image4.png"
+import userIcon from './userIcon.svg'
+import userIconColored from "./userIconColored.svg"
+import userAvatar from './user-avatar.png'
 
 
 export const cityList = ['Colombo', 'Kandy', 'Galle', 'Dambulla', 'Jaffna']
@@ -54,7 +57,7 @@ export const assets = {
     menu_icon,
     search_icon,
     close_icon,
-    users_icon,
+    userIcon,
     edit_icon,
     car_icon,
     location_icon,
@@ -72,7 +75,7 @@ export const assets = {
     location_icon_colored,
     arrow_icon,
     star_icon,
-    check_icon,
+    checkIconColored,
     tick_icon,
     delete_icon,
     eye_icon,
@@ -85,8 +88,10 @@ export const assets = {
     car_image1,
     upload_icon,
     user_profile,
+    userAvatar,
     car_image2,
     car_image3,
+    userIconColored,
     car_image4
 }
 

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import Title from '../../components/admin/Title'
+import AdminTitle from '../../components/admin/AdminTitle'
 import { useAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast'
 import { assets } from '../../assets/assets'
 
 const ManageUsers = () => {
+
   const { axios } = useAppContext()
   const [users, setUsers] = useState([])
 
   const fetchUsers = async () => {
     const { data } = await axios.get('/api/admin/users')
-    data.success ? setUsers(data.users) : toast.error(data.message)
+    data.success ? setUsers(data.data) : toast.error(data.message)
   }
 
   const updateRole = async (id, role) => {
@@ -30,48 +31,81 @@ const ManageUsers = () => {
 
   return (
     <div className="px-4 pt-10 md:px-10 w-full">
-      <Title title="Manage Users" subTitle="Update user roles or remove users from platform" />
+      <AdminTitle
+        title="Manage Users"
+        subTitle="Update user roles or remove users from platform"
+      />
 
-      <table className="w-full mt-6 border border-borderColor text-sm">
-        <thead className="bg-gray-50 text-gray-500">
-          <tr>
-            <th className="p-3">Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+      {/* Card Container */}
+      <div className="mt-6 w-250 overflow-hidden rounded-xl border border-borderColor bg-white shadow-sm">
+        <table className="w-full text-sm">
 
-        <tbody>
-          {users.map(user => (
-            <tr key={user._id} className="border-t">
-              <td className="p-3 flex items-center gap-2">
-                <img src={user.image || assets.avatar} className="h-8 w-8 rounded-full" />
-                {user.name}
-              </td>
-              <td>{user.email}</td>
-              <td>
-                <select
-                  value={user.role}
-                  onChange={e => updateRole(user._id, e.target.value)}
-                  className="border border-borderColor rounded px-2 py-1"
-                >
-                  <option value="user">User</option>
-                  <option value="owner">Owner</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </td>
-              <td>
-                <img
-                  src={assets.delete_icon}
-                  className="cursor-pointer"
-                  onClick={() => deleteUser(user._id)}
-                />
-              </td>
+          {/* Table Head */}
+          <thead className="bg-primary/10 border-b border-borderColor text-[#334155]">
+            <tr>
+              <th className="py-3 px-3 text-left font-semibold">User</th>
+              <th className="py-3 px-3 text-left font-semibold">Email</th>
+              <th className="py-3 px-3 text-left font-semibold">Role</th>
+              <th className="py-3 px-3 text-center font-semibold">Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          {/* Table Body */}
+          <tbody className="divide-y divide-borderColor">
+            {users.map(user => (
+              <tr
+                key={user._id}
+                className="hover:bg-light transition-colors"
+              >
+
+                {/* User + Avatar */}
+                <td className="py-2.5 px-3 flex items-center gap-3">
+                  <img
+                    src={user.image || assets.userAvatar}
+                    alt={user.name}
+                    className="h-10 w-10 rounded-full object-cover border-none"
+                  />
+                  <span className="font-medium text-[#2D3436]">
+                    {user.name}
+                  </span>
+                </td>
+
+                {/* Email */}
+                <td className="py-2.5 px-3 text-gray-600">
+                  {user.email}
+                </td>
+
+                {/* Role */}
+                <td className="py-2.5 px-3">
+                  <select
+                    value={user.role}
+                    onChange={e => updateRole(user._id, e.target.value)}
+                    className="rounded-md border border-borderColor bg-white px-2 py-1 text-sm text-[#334155]
+                               focus:outline-none focus:ring-2 focus:ring-accent"
+                  >
+                    <option value="user">User</option>
+                    <option value="owner">Owner</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
+
+                {/* Action */}
+                <td className="py-2.5 px-3 text-center">
+                  <img
+                    src={assets.delete_icon}
+                    alt="Delete"
+                    className="mx-auto h-8 w-8 cursor-pointer opacity-70
+                               hover:opacity-100 hover:scale-110 transition"
+                    onClick={() => deleteUser(user._id)}
+                  />
+                </td>
+
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
+      </div>
     </div>
   )
 }

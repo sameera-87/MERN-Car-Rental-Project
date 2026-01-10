@@ -1,7 +1,10 @@
 import User from "../../models/User.js";
 
 export const getAllUsersService = async () => {
-  return await User.find({ role: "user" }).select("-password");
+  console.log("/api/admin/users req reached to the backend")
+  return await User.find({
+    role: { $in: ["user", "owner"] }
+    }).select("-password");
 };
 
 export const updateUserService = async (userId, data) => {
